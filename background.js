@@ -26,3 +26,11 @@ setInterval(updateBadge, 30000);
 
 // (Optional) When popup is opened, update badge too
 chrome.action.onClicked.addListener(updateBadge);
+
+// Listen for messages from popup.js to update badge now
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "updateBadgeNow") {
+    updateBadge();
+    sendResponse({result: "Badge updated"});
+  }
+});
