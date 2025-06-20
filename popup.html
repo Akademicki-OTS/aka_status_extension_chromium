@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OTS76 Online Status</title>
+  <style>
+    html, body {
+      background: #17181b;
+      color: #e3e3e3;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-width: 250px;
+      min-height: 120px;
+    }
+    body {
+      padding: 18px 15px 12px 15px;
+    }
+    h2 {
+      font-size: 1.17em;
+      margin: 0 0 0.7em 0;
+      letter-spacing: 1px;
+      font-weight: 600;
+      color: #7ddaff;
+      text-shadow: 0 1px 4px #0a0c10;
+    }
+    ul {
+      padding-left: 18px;
+      margin: 6px 0 0 0;
+    }
+    li {
+      margin-bottom: 0.11em;
+      color: #e9ecef;
+      font-size: 1em;
+      word-break: break-word;
+    }
+    .discord {
+      margin-top: 0.9em;
+      color: #bdb0ff;
+    }
+    .error {
+      color: #ff5656;
+      font-size: 0.97em;
+      margin-top: 1em;
+    }
+    .loading {
+      color: #8896a6;
+    }
+    .footer {
+      font-size: 0.93em;
+      color: #c2e2fd;
+      margin-top:14px;
+      text-align:right;
+    }
+    a {
+      color: #81daff;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    a:hover {
+      color: #fff7b2;
+      text-decoration: underline;
+    }
+    .stat {
+      color: #e3e3e3;
+    }
+    .stat b {
+      color: #7ddaff;
+    }
+    #refresh-btn {
+      display: inline-block;
+      padding: 4px 12px;
+      font-size: 1em;
+      background: #202a34;
+      color: #9cefff;
+      border: none;
+      border-radius: 7px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      margin-right: 5px;
+      transition: background 0.17s;
+    }
+    #refresh-btn:hover {
+      background: #283544;
+      color: #fff;
+    }
+    .last-update {
+      margin-top: 7px;
+      font-size: 0.91em;
+      color: #6c89a6;
+    }
+  </style>
+</head>
+<body>
+  <h2>OTS76 Online</h2>
+  <button id="refresh-btn" title="Refresh now">⟳ Refresh</button>
+  <div id="content">
+    <span class="loading">Loading...</span>
+  </div>
+  <div class="footer">
+    <a href="https://ots76.org/" target="_blank">ots76.org</a>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
