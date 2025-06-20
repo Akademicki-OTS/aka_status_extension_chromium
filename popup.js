@@ -9,22 +9,14 @@ async function fetchStatus(showLoading = false) {
     if (!resp.ok) throw new Error("Network error");
     const data = await resp.json();
 
-    const onlinePlayers = data.players_online || [];
+    // Use the string as-is from your JSON:
+    const onlineString = data.online || "Unknown";
     const discordOnline = data.discord_online ?? "N/A";
+
     lastUpdate = new Date();
 
     let html = "";
-    html += `<div class="stat"><b>Players online:</b> ${onlinePlayers.length}</div>`;
-    if (onlinePlayers.length > 0) {
-      html += "<ul>";
-      onlinePlayers.forEach(player => {
-        html += `<li>${player.name || player}</li>`;
-      });
-      html += "</ul>";
-    } else {
-      html += "<div>No players online.</div>";
-    }
-
+    html += `<div class="stat"><b>${onlineString}</b></div>`;
     html += `<div class="discord"><b>Discord online:</b> ${discordOnline}</div>`;
     html += `<div class="last-update">Last update: <span id="timestamp">${lastUpdate.toLocaleTimeString()}</span></div>`;
     content.innerHTML = html;
@@ -44,11 +36,9 @@ document.getElementById('refresh-btn').addEventListener('click', () => {
   startAutoRefresh();
 });
 
-// Initial fetch and auto-refresh setup
 fetchStatus(true);
 startAutoRefresh();
 
-// Clean up interval when popup is closed
 window.addEventListener('unload', () => {
   if (intervalId) clearInterval(intervalId);
 });

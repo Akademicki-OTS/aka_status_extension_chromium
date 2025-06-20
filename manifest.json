@@ -1,13 +1,24 @@
 {
     "manifest_version": 3,
     "name": "OTS76 Online Status",
-    "version": "1.0",
+    "version": "1.1.2",
     "description": "View online players and Discord status for Akademicki Open Tibia Server.",
     "host_permissions": [
       "http://game.ots76.org/*"
     ],
     "action": {
-      "default_popup": "popup.html"
+      "default_popup": "popup.html",
+      "default_icon": {
+        "16": "icon16x16.png",
+        "32": "icon32x32.png"
+      }
+    },
+    "background": {
+      "service_worker": "background.js"
+    },
+    "icons": {
+        "16": "icon16x16.png",
+        "32": "icon32x32.png"
     }
   }
   
