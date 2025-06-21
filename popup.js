@@ -28,6 +28,8 @@ async function fetchStatus(showLoading = false) {
     content.innerHTML = html;
     debug('Content updated in popup.');
 
+    chrome.runtime.sendMessage({action: "updateBadgeNow"});
+
   } catch (e) {
     content.innerHTML = `<div class="error">Failed to load data.<br>${e.message}</div>`;
     debug('Error: ' + e.message);
