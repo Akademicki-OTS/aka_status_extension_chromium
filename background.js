@@ -1,6 +1,6 @@
 // background.js
 
-async function updateBadge() {
+async function updateBadge(withHeartbeat = false) {
   try {
     const resp = await fetch('http://game.ots76.org/client_json.php');
     const data = await resp.json();
@@ -10,27 +10,29 @@ async function updateBadge() {
       if (match) num = match[1];
     }
     chrome.action.setBadgeText({ text: num.toString() });
-    chrome.action.setBadgeBackgroundColor({ color: "#2196F3" }); // Nice blue
+
+    if (withHeartbeat) {
+      chrome.action.setBadgeBackgroundColor({ color: "#ff355b" });
+      setTimeout(() => {
+        chrome.action.setBadgeBackgroundColor({ color: "#2196F3" });
+      }, 400);
+    } else {
+      chrome.action.setBadgeBackgroundColor({ color: "#2196F3" });
+    }
   } catch (e) {
     chrome.action.setBadgeText({ text: "?" });
     chrome.action.setBadgeBackgroundColor({ color: "#888" });
   }
 }
 
-// Update on install, on startup, and every 30 seconds
-chrome.runtime.onInstalled.addListener(updateBadge);
-chrome.runtime.onStartup.addListener(updateBadge);
-
-// Update every 30 seconds
-setInterval(updateBadge, 30000);
-
-// (Optional) When popup is opened, update badge too
-chrome.action.onClicked.addListener(updateBadge);
-
-// Listen for messages from popup.js to update badge now
+// Update on install, on startup, and every 30 seconds (all with heartbeat)
+chrome.runtime.onInstalled.addListener(() => updateBadge(true));
+chrome.runtime.onStartup.addListener(() => updateBadge(true));
+setInterval(() => updateBadge(true), 30000);
+chrome.action.onClicked.addListener(() => updateBadge(true));
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "updateBadgeNow") {
-    updateBadge();
-    sendResponse({result: "Badge updated"});
+    updateBadge(true);
+    sendResponse({ result: "Badge updated" });
   }
 });

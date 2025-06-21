@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Aka 7.6 Legacy Online Status</title>
   <style>
-    html, body {
+    html,
+    body {
       background: #17181b;
       color: #e3e3e3;
       font-family: 'Segoe UI', Arial, sans-serif;
@@ -13,9 +15,11 @@
       min-width: 250px;
       min-height: 120px;
     }
+
     body {
       padding: 18px 15px 12px 15px;
     }
+
     h2 {
       font-size: 1.17em;
       margin: 0 0 0.7em 0;
@@ -24,76 +28,104 @@
       color: #7ddaff;
       text-shadow: 0 1px 4px #0a0c10;
     }
+
     ul {
       padding-left: 18px;
       margin: 6px 0 0 0;
     }
+
     li {
       margin-bottom: 0.11em;
       color: #e9ecef;
       font-size: 1em;
       word-break: break-word;
     }
-    .discord {
-      margin-top: 0.9em;
-      color: #bdb0ff;
-    }
+
     .error {
       color: #ff5656;
       font-size: 0.97em;
       margin-top: 1em;
     }
+
     .loading {
       color: #8896a6;
     }
+
     .footer {
       font-size: 0.93em;
       color: #c2e2fd;
-      margin-top:14px;
-      text-align:right;
+      margin-top: 14px;
+      text-align: right;
     }
+
     a {
       color: #81daff;
       text-decoration: none;
       transition: color 0.2s;
     }
+
     a:hover {
       color: #fff7b2;
       text-decoration: underline;
     }
+
     .stat {
       color: #e3e3e3;
     }
+
     .stat b {
       color: #7ddaff;
     }
+
     #refresh-btn {
-      display: inline-block;
-      padding: 4px 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 1.7em;
+      3 width: 1.7em;
       font-size: 1em;
       background: #202a34;
       color: #9cefff;
       border: none;
-      border-radius: 7px;
-      margin-bottom: 10px;
+      border-radius: 50%;
+      margin: 0;
+      margin-left: 5px;
       cursor: pointer;
-      margin-right: 5px;
-      transition: background 0.17s;
+      transition: background 0.17s, color 0.17s, transform 0.07s;
+      box-shadow: 0 1px 4px #10101822;
     }
+
     #refresh-btn:hover {
       background: #283544;
       color: #fff;
+      transform: scale(1.1) rotate(-30deg);
     }
+
     .last-update {
       margin-top: 7px;
       font-size: 0.91em;
       color: #6c89a6;
     }
+
+    .serverinfo,
+    .uptime,
+    .stat,
+    .discord {
+      font-size: 1.06em;
+      margin-bottom: 2px;
+    }
   </style>
 </head>
+
 <body>
-  <h2>Aka 7.6 Legacy Online</h2>
-  <button id="refresh-btn" title="Refresh now">⟳ Refresh</button>
+  <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px;">
+    <span
+      style="font-size: 1.17em; letter-spacing: 1px; font-weight: 600; color: #7ddaff; text-shadow: 0 1px 4px #0a0c10;">
+      Aka 7.6 Legacy Online
+    </span>
+    <button id="refresh-btn" title="Refresh now" aria-label="Refresh">⟳</button>
+  </div>
+
   <div id="content">
     <span class="loading">Loading...</span>
   </div>
@@ -102,4 +134,5 @@
   </div>
   <script src="popup.js"></script>
 </body>
+
 </html>
