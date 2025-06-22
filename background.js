@@ -2,7 +2,7 @@
 
 async function updateBadge(withHeartbeat = false) {
   try {
-    const resp = await fetch('http://game.ots76.org/client_json.php');
+    const resp = await fetch('https://game.ots76.org/client_json.php');
     const data = await resp.json();
     let num = 0;
     if (data.online) {
