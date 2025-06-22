@@ -4,7 +4,7 @@
   "version": "1.4.9",
   "description": "View online players and Discord status for Akademicki Open Tibia Server (Aka 7.6 Legacy).",
   "host_permissions": [
-    "https://game.ots76.org/*"
+    "http://game.ots76.org/*"
   ],
   "action": {
     "default_popup": "popup.html",

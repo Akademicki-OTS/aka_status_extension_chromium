@@ -10,7 +10,7 @@ async function fetchStatus(showLoading = false) {
   debug('fetchStatus called');
   if (showLoading) content.innerHTML = '<span class="loading">Loading...</span>';
   try {
-    const jsonResp = await fetch('https://game.ots76.org/client_json.php');
+    const jsonResp = await fetch('http://game.ots76.org/client_json.php');
     debug('JSON fetch status: ' + jsonResp.status);
     if (!jsonResp.ok) throw new Error("Network error (stats)");
     const data = await jsonResp.json();
