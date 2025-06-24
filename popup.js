@@ -29,26 +29,28 @@ async function fetchStatus(showLoading = false) {
     lastUpdate = new Date();
 
     let html = `
-      <div class="serverinfo">
-        Server: <span style="font-weight:600;color:${serverStatus === "ONLINE" ? "#78ff78" : "#ff5656"};">
-          ${serverStatus}
-        </span>
-      </div>
-      <div class="uptime" style="margin:2px 0 10px 0;">
-        Uptime: <span style="color:#c3e3fa;">${uptime}</span>
-      </div>
-      <div class="stat">
-        Players online: <span style="font-weight:600;color:#3db9f8;">${playersNum}</span>
-      </div>
-      <div style="margin:3px 0 12px 0;">
-        Monsters: <span style="font-weight:600;color:#3db9f8;">${monsters}</span>
-      </div>
-      <div style="height:7px"></div>
-      <div class="discord">
-        Discord online: <span style="font-weight:600;color:#3db9f8;">${discordOnline}</span>
-      </div>
-      <div class="last-update">Last update: <span id="timestamp">${lastUpdate.toLocaleTimeString()}</span></div>
-    `;
+  <div class="serverinfo">
+    Server: <span style="font-weight:600;color:${serverStatus === "ONLINE" ? "#78ff78" : "#ff5656"};">
+      ${serverStatus}
+    </span>
+  </div>
+  <div class="uptime" style="margin:2px 0 10px 0;">
+    Uptime: <span style="color:#c3e3fa;">${uptime}</span>
+  </div>
+  <div class="spacer"></div>
+  <div class="stat">
+    Players online: <span style="font-weight:600;color:#3db9f8;">${playersNum}</span>
+  </div>
+  <div style="margin:3px 0 12px 0;">
+    Monsters: <span style="font-weight:600;color:#3db9f8;">${monsters}</span>
+  </div>
+  <div style="height:7px"></div>
+  <div class="discord">
+    Discord online: <span style="font-weight:600;color:#3db9f8;">${discordOnline}</span>
+  </div>
+  <div class="last-update">Last update: <span id="timestamp">${lastUpdate.toLocaleTimeString()}</span></div>
+`;
+
     content.innerHTML = html;
     debug('Content updated in popup.');
 
