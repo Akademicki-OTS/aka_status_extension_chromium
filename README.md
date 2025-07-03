@@ -2,7 +2,7 @@ Display the number of players and Discord online for **Akademicki Open Tibia Ser
 
 - 🎯 **Live badge:** See the number of players online at a glance.
 - 🖱️ **Popup:** Click the icon to view player and Discord status.
-- 🔄 **Auto-refresh:** Popup updates every 30 seconds. Manual ⟳ Refresh button included.
+- 🔄 **Auto-refresh:** Popup updates every 10 seconds. Manual ⟳ Refresh button included.
 
 ---
 
