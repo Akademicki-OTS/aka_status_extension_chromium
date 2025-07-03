@@ -13,11 +13,9 @@
       min-width: 250px;
       min-height: 120px;
     }
-
     body {
       padding: 18px 15px 12px 15px;
     }
-
     .header-row {
       display: flex;
       align-items: center;
@@ -35,17 +33,14 @@
       margin-bottom: 1px;
       display: inline-block;
     }
-
     .error {
       color: #ff5656;
       font-size: 0.97em;
       margin-top: 1em;
     }
-
     .loading {
       color: #8896a6;
     }
-
     .footer {
       font-size: 0.93em;
       color: #c2e2fd;
@@ -53,7 +48,6 @@
       text-align: right;
       line-height: 1.5em;
     }
-
     a {
       color: #81daff;
       text-decoration: none;
@@ -64,7 +58,6 @@
       color: #fff7b2;
       text-decoration: underline;
     }
-
     .stat {
       color: #e3e3e3;
     }
@@ -105,22 +98,57 @@
     .spacer {
       height: 10px;
     }
+
+    #mute-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.7em;
+  width: 1.7em;
+  font-size: 1em;
+  background: #202a34;
+  color: #ffd480;
+  border: none;
+  border-radius: 50%;
+  margin: 0;
+  margin-left: 3px;
+  cursor: pointer;
+  transition: background 0.17s, color 0.17s, transform 0.07s;
+  box-shadow: 0 1px 4px #10101822;
+}
+#mute-btn:hover {
+  background: #283544;
+  color: #fff;
+  transform: scale(1.1) rotate(-15deg);
+}
+
+.watchdog-separator {
+  border: none;
+  border-top: 2px dashed #33425e;
+  margin: 18px 0 8px 0;
+}
   </style>
 </head>
 <body>
   <div class="header-row">
     <span class="ext-title">Aka 7.6 Status</span>
     <button id="refresh-btn" title="Refresh now" aria-label="Refresh">⟳</button>
+    <button id="mute-btn" title="Mute/unmute sound" aria-label="Mute/unmute" style="margin-left:3px;"></button>
   </div>
 
   <div id="content">
     <span class="loading">Loading...</span>
   </div>
+  
+  <hr class="watchdog-separator">
+  <div id="watchdog" style="margin:14px 0 0 0;"></div>
 
   <div class="footer">
     <a href="http://ots76.org/" target="_blank">ots76.org</a><br>
     <a href="https://github.com/Akademicki-OTS/aka_status_extension_chromium" target="_blank">GitHub</a>
   </div>
+  <!-- Audio for notifications -->
+  <audio id="ding-audio" src="ding.wav" preload="auto"></audio>
   <script src="popup.js"></script>
 </body>
 </html>

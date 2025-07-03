@@ -28,7 +28,7 @@ async function updateBadge(withHeartbeat = false) {
 // Update on install, on startup, and every 30 seconds (all with heartbeat)
 chrome.runtime.onInstalled.addListener(() => updateBadge(true));
 chrome.runtime.onStartup.addListener(() => updateBadge(true));
-setInterval(() => updateBadge(true), 30000);
+setInterval(() => updateBadge(true), 10000);
 chrome.action.onClicked.addListener(() => updateBadge(true));
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "updateBadgeNow") {
