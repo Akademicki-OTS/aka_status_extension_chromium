@@ -1,5 +1,3 @@
-# Aka 7.6 Legacy Online Status Chrome Extension
-
 Display the number of players and Discord online for **Akademicki Open Tibia Server (Aka 7.6 Legacy)** right in your Chrome toolbar!
 
 - 🎯 **Live badge:** See the number of players online at a glance.
@@ -8,60 +6,30 @@ Display the number of players and Discord online for **Akademicki Open Tibia Ser
 
 ---
 
-## 🚀 Installation Guide (Unpacked/Developer Mode)
+## 🚀 Installation
 
-1. **Download or Clone this Repository**
+Install directly from the Chrome Web Store:
 
-   Use "Download ZIP" on GitHub and extract the files.
+[Get Aka 7.6 Legacy Online Status](https://chromewebstore.google.com/detail/aka-76-legacy-online-stat/eeacfdihbhhlakbljgbiblobconbklpf)
 
-2. **Open the Extensions Page in Chrome**
-
-   - Go to `chrome://extensions`
-   - Enable **Developer mode** (toggle in the top right).
-
-3. **Load the Extension**
-
-   - Click **Load unpacked**
-   - Select the folder.
-
-4. **(Optional) Pin the Extension**
-
+1. Click **Add to Chrome** on the extension page.
+2. Confirm by clicking **Add extension**.
+3. The icon will appear in your toolbar.
+4. (Optional) Pin the extension:
    - Click the puzzle piece in Chrome’s toolbar.
-   - Pin **Aka 7.6 Legacy Online Status** for easy access.
-
-5. **You're Done!**
-
-   - The icon shows the number of players online.
-   - Click the icon for player and Discord status. The popup auto-refreshes every 30 seconds.
-   - Click ⟳ Refresh for an instant update.
+   - Click the pin icon next to **Aka 7.6 Legacy Online Status**.
 
 ---
 
-## 📦 Folder Structure
+## ➡️ Usage
 
-```
-ots76-legacy-extension/
-├── manifest.json
-├── background.js
-├── popup.html
-├── popup.js
-├── icon16x16.png
-├── icon32x32.png
-└── README.md
-```
+- The toolbar icon displays the current number of players online.
+- Click the icon to open a popup with detailed player and Discord status.
+- Popup refreshes automatically every 30 seconds; click ⟳ for an immediate update.
 
 ---
-
-## ⚠️ Notes
-
-- This is an **unpacked extension** (developer mode); Chrome will **not auto-update** it.
-
----
-
 
 ## 📋 License
 
 MIT License.  
 No warranty.
-
----
