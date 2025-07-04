@@ -20,7 +20,7 @@ function getWatchdogList(cb) {
 async function ensureOffscreen() {
   if (await chrome.offscreen.hasDocument()) return;
   await chrome.offscreen.createDocument({
-    url: 'offscreen.html',
+    url: 'static/offscreen.html',
     reasons: ['AUDIO_PLAYBACK'],
     justification: 'Play ding.wav when a watched player logs in'
   });
@@ -30,15 +30,11 @@ function playDingOffscreen() {
   chrome.runtime.sendMessage('play-ding');
 }
 
-function playDingOffscreen() {
-  chrome.runtime.sendMessage("play-ding");
-}
-
 // Helper: Create browser notification
 function notifyPlayerOnline(playerNames) {
   chrome.notifications.create({
     type: "basic",
-    iconUrl: "icon32x32.png",
+    iconUrl: chrome.runtime.getURL("img/icon32x32.png"),
     title: "Aka 7.6 Status: Watchdog",
     message: (playerNames.length === 1
       ? `${playerNames[0]} is online!`

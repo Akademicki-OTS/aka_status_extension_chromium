@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Aka 7.6 Legacy Online Status",
   "short_name": "Aka 7.6 Status",
-  "version": "1.7.15",
+  "version": "1.7.17",
   "description": "View online players and Discord status for Akademicki Open Tibia Server (Aka 7.6 Legacy).",
   "host_permissions": [
     "http://game.ots76.org/*",
