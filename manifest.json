@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Aka 7.6 Legacy Online Status",
   "short_name": "Aka 7.6 Status",
-  "version": "1.7.14",
+  "version": "1.7.15",
   "description": "View online players and Discord status for Akademicki Open Tibia Server (Aka 7.6 Legacy).",
   "host_permissions": [
     "http://game.ots76.org/*",
@@ -14,18 +14,18 @@
   "offscreen"
 ],
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "static/popup.html",
     "default_icon": {
-      "16": "icon16x16.png",
-      "32": "icon32x32.png"
+      "16": "img/icon16x16.png",
+      "32": "img/icon32x32.png"
     }
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "js/background.js"
   },
   "icons": {
-    "16": "icon16x16.png",
-    "32": "icon32x32.png"
+    "16": "img/icon16x16.png",
+    "32": "img/icon32x32.png"
   },
   "minimum_chrome_version": "109",
   "homepage_url": "https://github.com/Akademicki-OTS/aka_status_extension_chromium"
