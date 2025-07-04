@@ -1,7 +1,5 @@
 let intervalId = null;
 let lastUpdate = null;
-let prevOnlinePlayers = [];
-let lastNotifiedPlayers = [];
 let muteState = false;
 
 // Utility
@@ -21,15 +19,6 @@ function saveMuteState(mute) {
 }
 function loadMuteState(cb) {
   chrome.storage.local.get({ "muteState": false }, result => cb(result.muteState));
-}
-
-function playDing() {
-  if (muteState) return;
-  const audio = document.getElementById('ding-audio');
-  if (audio) {
-    audio.currentTime = 0;
-    audio.play();
-  }
 }
 
 function updateMuteBtnIcon() {
@@ -186,17 +175,6 @@ async function fetchStatus(showLoading = false) {
 
     // --- Watchdog functionality ---
     renderWatchdog(players);
-
-    // --- Watchdog notification logic ---
-    loadWatchdogList((watchdogList) => {
-      const playersNowOnline = watchdogList.filter(name => players.includes(name));
-      // For each watched player, if they were NOT online last time but are now online, ding
-      const newOnline = playersNowOnline.filter(name => !lastNotifiedPlayers.includes(name));
-      if (newOnline.length > 0) {
-        playDing();
-      }
-      lastNotifiedPlayers = playersNowOnline.slice();
-    });
 
     debug('Content updated in popup.');
     chrome.runtime.sendMessage({action: "updateBadgeNow"});

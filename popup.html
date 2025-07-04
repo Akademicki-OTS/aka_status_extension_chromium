@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Aka 7.6 Status</title>
   <style>
-    html, body {
+    html,
+    body {
       background: #17181b;
       color: #e3e3e3;
       font-family: 'Segoe UI', Arial, sans-serif;
@@ -13,15 +15,18 @@
       min-width: 250px;
       min-height: 120px;
     }
+
     body {
       padding: 18px 15px 12px 15px;
     }
+
     .header-row {
       display: flex;
       align-items: center;
       gap: 7px;
       margin-bottom: 8px;
     }
+
     .ext-title {
       font-size: 1.17em;
       letter-spacing: 1px;
@@ -33,14 +38,17 @@
       margin-bottom: 1px;
       display: inline-block;
     }
+
     .error {
       color: #ff5656;
       font-size: 0.97em;
       margin-top: 1em;
     }
+
     .loading {
       color: #8896a6;
     }
+
     .footer {
       font-size: 0.93em;
       color: #c2e2fd;
@@ -48,22 +56,27 @@
       text-align: right;
       line-height: 1.5em;
     }
+
     a {
       color: #81daff;
       text-decoration: none;
       transition: color 0.2s;
       word-break: break-all;
     }
+
     a:hover {
       color: #fff7b2;
       text-decoration: underline;
     }
+
     .stat {
       color: #e3e3e3;
     }
+
     .stat b {
       color: #7ddaff;
     }
+
     #refresh-btn {
       display: inline-flex;
       align-items: center;
@@ -81,52 +94,60 @@
       transition: background 0.17s, color 0.17s, transform 0.07s;
       box-shadow: 0 1px 4px #10101822;
     }
+
     #refresh-btn:hover {
       background: #283544;
       color: #fff;
       transform: scale(1.1) rotate(-30deg);
     }
+
     .last-update {
       margin-top: 7px;
       font-size: 0.91em;
       color: #6c89a6;
     }
-    .serverinfo, .uptime, .stat, .discord {
+
+    .serverinfo,
+    .uptime,
+    .stat,
+    .discord {
       font-size: 1.06em;
       margin-bottom: 2px;
     }
+
     .spacer {
       height: 10px;
     }
 
     #mute-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 1.7em;
-  width: 1.7em;
-  font-size: 1em;
-  background: #202a34;
-  color: #ffd480;
-  border: none;
-  border-radius: 50%;
-  margin: 0;
-  margin-left: 3px;
-  cursor: pointer;
-  transition: background 0.17s, color 0.17s, transform 0.07s;
-  box-shadow: 0 1px 4px #10101822;
-}
-#mute-btn:hover {
-  background: #283544;
-  color: #fff;
-  transform: scale(1.1) rotate(-15deg);
-}
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 1.7em;
+      width: 1.7em;
+      font-size: 1em;
+      background: #202a34;
+      color: #ffd480;
+      border: none;
+      border-radius: 50%;
+      margin: 0;
+      margin-left: 3px;
+      cursor: pointer;
+      transition: background 0.17s, color 0.17s, transform 0.07s;
+      box-shadow: 0 1px 4px #10101822;
+    }
 
-.watchdog-separator {
-  border: none;
-  border-top: 2px dashed #33425e;
-  margin: 18px 0 8px 0;
-}
+    #mute-btn:hover {
+      background: #283544;
+      color: #fff;
+      transform: scale(1.1) rotate(-15deg);
+    }
+
+    .watchdog-separator {
+      border: none;
+      border-top: 2px dashed #33425e;
+      margin: 18px 0 8px 0;
+    }
   </style>
 </head>
 <body>
@@ -147,8 +168,6 @@
     <a href="http://ots76.org/" target="_blank">ots76.org</a><br>
     <a href="https://github.com/Akademicki-OTS/aka_status_extension_chromium" target="_blank">GitHub</a>
   </div>
-  <!-- Audio for notifications -->
-  <audio id="ding-audio" src="ding.wav" preload="auto"></audio>
   <script src="popup.js"></script>
 </body>
 </html>

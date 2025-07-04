@@ -17,6 +17,23 @@ function getWatchdogList(cb) {
   chrome.storage.local.get({ "watchdogList": [] }, result => cb(result.watchdogList));
 }
 
+async function ensureOffscreen() {
+  if (await chrome.offscreen.hasDocument()) return;
+  await chrome.offscreen.createDocument({
+    url: 'offscreen.html',
+    reasons: ['AUDIO_PLAYBACK'],
+    justification: 'Play ding.wav when a watched player logs in'
+  });
+}
+
+function playDingOffscreen() {
+  chrome.runtime.sendMessage('play-ding');
+}
+
+function playDingOffscreen() {
+  chrome.runtime.sendMessage("play-ding");
+}
+
 // Helper: Create browser notification
 function notifyPlayerOnline(playerNames) {
   chrome.notifications.create({
@@ -71,7 +88,8 @@ async function pollStatus() {
     const onlineNow = watchdogList.filter(name => players.includes(name));
     const newOnline = onlineNow.filter(name => !prevOnline.includes(name));
     if (newOnline.length > 0) {
-      notifyPlayerOnline(newOnline);
+      notifyPlayerOnline(newOnline);          // visual
+      ensureOffscreen().then(playDingOffscreen); // audio
     }
     prevOnline = onlineNow;
   });
