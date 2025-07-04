@@ -126,13 +126,12 @@ async function fetchStatus(showLoading = false) {
         Show players
       </button>
       <div id="players-list" style="display:none; margin:7px 0 10px 2px;">
-        ${
-          players.length
-            ? players.map(player =>
-                `<a href="https://ots76.org/index.php?module=findchar&player=${encodeURIComponent(player)}" target="_blank">${player}</a>`
-              ).join('<br>')
-            : '<span style="color:#aaa;font-size:0.97em;">No players online</span>'
-        }
+        ${players.length
+        ? players.map(player =>
+          `<a href="https://ots76.org/index.php?module=findchar&player=${encodeURIComponent(player)}" target="_blank">${player}</a>`
+        ).join('<br>')
+        : '<span style="color:#aaa;font-size:0.97em;">No players online</span>'
+      }
       </div>
     `;
 
@@ -177,7 +176,7 @@ async function fetchStatus(showLoading = false) {
     renderWatchdog(players);
 
     debug('Content updated in popup.');
-    chrome.runtime.sendMessage({action: "updateBadgeNow"});
+    chrome.runtime.sendMessage({ action: "updateBadgeNow" });
   } catch (e) {
     content.innerHTML = `<div class="error">Failed to load data.<br>${e.message}</div>`;
     debug('Error: ' + e.message);

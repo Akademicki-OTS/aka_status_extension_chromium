@@ -9,10 +9,10 @@
     "https://game.ots76.org/*"
   ],
   "permissions": [
-  "storage",
-  "notifications",
-  "offscreen"
-],
+    "storage",
+    "notifications",
+    "offscreen"
+  ],
   "action": {
     "default_popup": "static/popup.html",
     "default_icon": {
