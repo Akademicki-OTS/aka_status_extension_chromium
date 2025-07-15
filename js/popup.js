@@ -136,28 +136,33 @@ async function fetchStatus(showLoading = false) {
     `;
 
     let html = `
-      <div class="serverinfo">
-        Server: <span style="font-weight:600;color:${serverStatus === "ONLINE" ? "#78ff78" : "#ff5656"};">
-          ${serverStatus}
-        </span>
-      </div>
-      <div class="uptime" style="margin:2px 0 10px 0;">
-        Uptime: <span style="color:#c3e3fa;">${uptime}</span>
-      </div>
-      <div class="spacer"></div>
-      <div class="stat">
-        Players online: <span style="font-weight:600;color:#3db9f8;">${playersNum}</span>
-      </div>
-      ${playersSection}
-      <div style="margin:3px 0 12px 0;">
-        Monsters: <span style="font-weight:600;color:#3db9f8;">${monsters}</span>
-      </div>
-      <div style="height:7px"></div>
-      <div class="discord">
-        Discord online: <span style="font-weight:600;color:#3db9f8;">${discordOnline}</span>
-      </div>
-      <div class="last-update">Last update: <span id="timestamp">${lastUpdate.toLocaleTimeString()}</span></div>
-    `;
+  <div class="serverinfo">
+    Server: <span class="server-status ${serverStatus === "ONLINE" ? "status-online" : "status-offline"}">
+      ${serverStatus}
+    </span>
+  </div>
+  <div class="uptime-players-row">
+    <div>
+      <b>Uptime:</b> <span class="uptime-value">${uptime}</span>
+    </div>
+    <div>
+      <b>Players online:</b> <span class="stat-value">${playersNum}</span>
+    </div>
+  </div>
+  ${playersSection}
+  <div class="monsters-container">
+    <b>Monsters:</b> <span class="stat-value">${monsters}</span>
+  </div>
+  <hr class="stat-separator"/>
+  <div class="stat discord">
+    <a href="https://discord.com/invite/jAU83Yg5SN" target="_blank" rel="noopener">
+      <b>Discord online:</b> <span class="stat-value">${discordOnline}</span>
+    </a>
+  </div>
+  <div class="last-update">Last update: <span id="timestamp">${lastUpdate.toLocaleTimeString()}</span></div>
+`;
+
+
 
     content.innerHTML = html;
 
