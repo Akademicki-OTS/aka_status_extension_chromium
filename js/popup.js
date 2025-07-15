@@ -137,30 +137,31 @@ async function fetchStatus(showLoading = false) {
 
     let html = `
   <div class="serverinfo">
-    Server: <span style="font-weight:600;color:${serverStatus === "ONLINE" ? "#78ff78" : "#ff5656"};">
+    Server: <span class="server-status ${serverStatus === "ONLINE" ? "status-online" : "status-offline"}">
       ${serverStatus}
     </span>
   </div>
   <div class="uptime-players-row">
     <div>
-      <b>Uptime:</b> <span style="color:#c3e3fa;">${uptime}</span>
+      <b>Uptime:</b> <span class="uptime-value">${uptime}</span>
     </div>
     <div>
-      <b>Players online:</b> <span style="font-weight:600;color:#3db9f8;">${playersNum}</span>
+      <b>Players online:</b> <span class="stat-value">${playersNum}</span>
     </div>
   </div>
   ${playersSection}
-  <div style="margin:3px 0 8px 0;">
-    <b>Monsters:</b> <span style="font-weight:600;color:#3db9f8;">${monsters}</span>
+  <div class="monsters-container">
+    <b>Monsters:</b> <span class="stat-value">${monsters}</span>
   </div>
   <hr class="stat-separator"/>
   <div class="stat discord">
     <a href="https://discord.com/invite/jAU83Yg5SN" target="_blank" rel="noopener">
-      <b>Discord online:</b> <span style="font-weight:600;color:#3db9f8;">${discordOnline}</span>
+      <b>Discord online:</b> <span class="stat-value">${discordOnline}</span>
     </a>
   </div>
   <div class="last-update">Last update: <span id="timestamp">${lastUpdate.toLocaleTimeString()}</span></div>
 `;
+
 
 
     content.innerHTML = html;
