@@ -23,8 +23,16 @@
     .header-row {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 7px;
       margin-bottom: 8px;
+      position: relative;
+    }
+
+    .header-main {
+      display: flex;
+      align-items: center;
+      gap: 7px;
     }
 
     .ext-title {
@@ -55,6 +63,18 @@
       margin-top: 14px;
       text-align: right;
       line-height: 1.5em;
+      position: relative;
+    }
+
+    .last-update-footer {
+      color: #6c89a6;
+      font-size: 0.91em;
+      margin-top: 5px;
+      margin-bottom: 0;
+      text-align: left;
+      position: absolute;
+      left: 0;
+      bottom: -2px;
     }
 
     a {
@@ -101,24 +121,6 @@
       transform: scale(1.1) rotate(-30deg);
     }
 
-    .last-update {
-      margin-top: 7px;
-      font-size: 0.91em;
-      color: #6c89a6;
-    }
-
-    .serverinfo,
-    .uptime,
-    .stat,
-    .discord {
-      font-size: 1.06em;
-      margin-bottom: 2px;
-    }
-
-    .spacer {
-      height: 10px;
-    }
-
     #mute-btn {
       display: inline-flex;
       align-items: center;
@@ -143,82 +145,73 @@
       transform: scale(1.1) rotate(-15deg);
     }
 
+    /* Server info and status row */
+    .serverinfo-inline {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 2px;
+    }
+    .server-status {
+      font-weight: 600;
+      padding: 0 2px;
+    }
+    .status-online {
+      color: #78ff78;
+    }
+    .status-offline {
+      color: #ff5656;
+    }
+    .uptime-inline {
+      color: #c3e3fa;
+      font-size: 0.98em;
+      margin-left: 8px;
+      letter-spacing: 1px;
+    }
+    .stat-value {
+      font-weight: 600;
+      color: #3db9f8;
+    }
+    .monsters-container {
+      margin: 3px 0 8px 0;
+    }
+    .stat.discord a {
+      color: #81daff;
+      text-decoration: none;
+    }
+    .stat.discord a:hover {
+      color: #fff7b2;
+      text-decoration: underline;
+    }
     .watchdog-separator {
       border: none;
       border-top: 2px dashed #33425e;
       margin: 18px 0 8px 0;
     }
-    
-    .server-status {
-      font-weight: 600;
-      padding: 0 2px;
-    }
-
-    .status-online {
-      color: #78ff78;
-    }
-
-    .status-offline {
-      color: #ff5656;
-    }
-
-    .uptime-players-row {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-      margin-bottom: 4px;
-    }
-
-    .uptime-value {
-      color: #c3e3fa;
-      font-weight: 500;
-    }
-
-    .stat-value {
-      font-weight: 600;
-      color: #3db9f8;
-    }
-
-    .monsters-container {
-      margin: 3px 0 8px 0;
-    }
-
-    .stat-separator {
-      border: none;
-      border-top: 1.5px dashed #33425e;
-      margin: 7px 0 6px 0;
-    }
-
-    .stat.discord a {
-      color: #81daff;
-      text-decoration: none;
-    }
-
-    .stat.discord a:hover {
-      color: #fff7b2;
-      text-decoration: underline;
-    }
-
   </style>
 </head>
 
 <body>
   <div class="header-row">
-    <span class="ext-title">Aka 7.6 Status</span>
-    <button id="refresh-btn" title="Refresh now" aria-label="Refresh">⟳</button>
-    <button id="mute-btn" title="Mute/unmute sound" aria-label="Mute/unmute" style="margin-left:3px;"></button>
+    <div class="header-main">
+      <span class="ext-title">Aka 7.6 Status</span>
+      <button id="refresh-btn" title="Refresh now" aria-label="Refresh">⟳</button>
+      <button id="mute-btn" title="Mute/unmute sound" aria-label="Mute/unmute" style="margin-left:3px;"></button>
+    </div>
   </div>
 
   <div id="content">
     <span class="loading">Loading...</span>
   </div>
 
-  <hr class="watchdog-separator">
   <div id="watchdog" style="margin:14px 0 0 0;"></div>
 
   <div class="footer">
     <a href="http://ots76.org/" target="_blank">ots76.org</a><br>
     <a href="https://github.com/Akademicki-OTS/aka_status_extension_chromium" target="_blank">GitHub</a>
+    <div class="last-update-footer" id="last-update-footer">
+      <!-- Last update will be rendered here by JS -->
+    </div>
   </div>
   <script src="../js/popup.js"></script>
 </body>

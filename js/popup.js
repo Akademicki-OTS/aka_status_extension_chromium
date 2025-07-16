@@ -33,6 +33,18 @@ function updateMuteBtnIcon() {
 function renderWatchdog(playersOnline) {
   loadWatchdogList((watchdogList) => {
     let html = `
+      <button id="show-players-btn" style="
+        margin-bottom:8px; 
+        background:#232b37; 
+        border:none; 
+        color:#8ecffb; 
+        font-size:0.97em;
+        padding:3px 13px; 
+        border-radius:7px; 
+        cursor:pointer;
+      ">
+        Show players
+      </button>
       <form id="add-watchdog-form" style="margin-bottom:7px;display:flex;gap:7px;">
         <input id="watchdog-input" type="text" maxlength="30" placeholder="Player name" style="flex:1 1 0; border-radius:6px; border:1px solid #233; background:#212630; color:#eee; padding:3px 8px; font-size:0.98em;">
         <button type="submit" style="background:#26354b; color:#7ddaff; border:none; border-radius:6px; padding:3px 11px; cursor:pointer;">Add</button>
@@ -54,34 +66,61 @@ function renderWatchdog(playersOnline) {
       }
       html += `</ul>`;
     }
-    html += `</div>`;
+    html += `</div>
+    <div id="players-list" style="display:none; margin:7px 0 10px 2px;"></div>
+    `;
+
     document.getElementById('watchdog').innerHTML = html;
 
-    // Add/Remove events
+    // Show/hide player list button
+    const btn = document.getElementById('show-players-btn');
+    const list = document.getElementById('players-list');
+    if (btn && list) {
+      btn.addEventListener('click', () => {
+        if (list.innerHTML === "") {
+          if (playersOnline.length) {
+            list.innerHTML = playersOnline.map(player =>
+              `<a href="https://ots76.org/index.php?module=findchar&player=${encodeURIComponent(player)}" target="_blank">${player}</a>`
+            ).join('<br>');
+          } else {
+            list.innerHTML = '<span style="color:#aaa;font-size:0.97em;">No players online</span>';
+          }
+        }
+        const visible = list.style.display !== 'none';
+        list.style.display = visible ? 'none' : 'block';
+        btn.textContent = visible ? 'Show players' : 'Hide players';
+      });
+    }
+
+    // Add/Remove events for watchdog
     document.getElementById('add-watchdog-form').onsubmit = (e) => {
       e.preventDefault();
       const input = document.getElementById('watchdog-input');
       let val = input.value.trim();
       if (!val) return;
       val = val.replace(/\s+/g, " "); // Single spaces only
-      if (watchdogList.includes(val)) {
+      loadWatchdogList((watchdogList) => {
+        if (watchdogList.includes(val)) {
+          input.value = "";
+          return;
+        }
+        watchdogList.push(val);
+        saveWatchdogList(watchdogList);
         input.value = "";
-        return;
-      }
-      watchdogList.push(val);
-      saveWatchdogList(watchdogList);
-      input.value = "";
-      renderWatchdog(playersOnline);
+        renderWatchdog(playersOnline);
+      });
     };
     Array.from(document.getElementsByClassName('remove-watchdog-btn')).forEach(btn => {
       btn.onclick = () => {
         const name = decodeURIComponent(btn.getAttribute('data-name'));
-        const idx = watchdogList.indexOf(name);
-        if (idx !== -1) {
-          watchdogList.splice(idx, 1);
-          saveWatchdogList(watchdogList);
-          renderWatchdog(playersOnline);
-        }
+        loadWatchdogList((watchdogList) => {
+          const idx = watchdogList.indexOf(name);
+          if (idx !== -1) {
+            watchdogList.splice(idx, 1);
+            saveWatchdogList(watchdogList);
+            renderWatchdog(playersOnline);
+          }
+        });
       }
     });
   });
@@ -110,75 +149,33 @@ async function fetchStatus(showLoading = false) {
 
     lastUpdate = new Date();
 
-    // Players button and player list
-    let playersSection = `
-      <button id="show-players-btn" style="
-        margin-top:6px; 
-        background:#232b37; 
-        border:none; 
-        color:#8ecffb; 
-        font-size:0.97em;
-        padding:3px 13px; 
-        border-radius:7px; 
-        cursor:pointer;
-        margin-bottom:5px;
-        ">
-        Show players
-      </button>
-      <div id="players-list" style="display:none; margin:7px 0 10px 2px;">
-        ${players.length
-        ? players.map(player =>
-          `<a href="https://ots76.org/index.php?module=findchar&player=${encodeURIComponent(player)}" target="_blank">${player}</a>`
-        ).join('<br>')
-        : '<span style="color:#aaa;font-size:0.97em;">No players online</span>'
-      }
-      </div>
-    `;
-
     let html = `
-  <div class="serverinfo">
-    Server: <span class="server-status ${serverStatus === "ONLINE" ? "status-online" : "status-offline"}">
-      ${serverStatus}
-    </span>
-  </div>
-  <div class="uptime-players-row">
-    <div>
-      <b>Uptime:</b> <span class="uptime-value">${uptime}</span>
-    </div>
-    <div>
-      <b>Players online:</b> <span class="stat-value">${playersNum}</span>
-    </div>
-  </div>
-  ${playersSection}
-  <div class="monsters-container">
-    <b>Monsters:</b> <span class="stat-value">${monsters}</span>
-  </div>
-  <hr class="stat-separator"/>
-  <div class="stat discord">
-    <a href="https://discord.com/invite/jAU83Yg5SN" target="_blank" rel="noopener">
-      <b>Discord online:</b> <span class="stat-value">${discordOnline}</span>
-    </a>
-  </div>
-  <div class="last-update">Last update: <span id="timestamp">${lastUpdate.toLocaleTimeString()}</span></div>
-`;
-
-
+      <div class="serverinfo-inline">
+        <span>Server: <span class="server-status ${serverStatus === "ONLINE" ? "status-online" : "status-offline"}">${serverStatus}</span></span>
+        <span class="uptime-inline">[${uptime.replace(/\s+/g, '').trim()}]</span>
+      </div>
+      <div class="stat">
+        <b>Players online:</b> <span class="stat-value">${playersNum}</span>
+      </div>
+      <div class="stat discord">
+        <a href="https://discord.com/invite/jAU83Yg5SN" target="_blank" rel="noopener">
+          <b>Discord online:</b> <span class="stat-value">${discordOnline}</span>
+        </a>
+      </div>
+      <div class="monsters-container">
+        <b>Monsters:</b> <span class="stat-value">${monsters}</span>
+      </div>
+      <hr class="watchdog-separator"/>
+    `;
 
     content.innerHTML = html;
 
-    // Show/hide player list button
-    const btn = document.getElementById('show-players-btn');
-    const list = document.getElementById('players-list');
-    if (btn && list) {
-      btn.addEventListener('click', () => {
-        const visible = list.style.display !== 'none';
-        list.style.display = visible ? 'none' : 'block';
-        btn.textContent = visible ? 'Show players' : 'Hide players';
-      });
-    }
-
     // --- Watchdog functionality ---
     renderWatchdog(players);
+
+    // --- LAST UPDATE footer ---
+    document.getElementById('last-update-footer').innerHTML =
+      `Last update: <span id="timestamp">${lastUpdate.toLocaleTimeString()}</span>`;
 
     debug('Content updated in popup.');
     chrome.runtime.sendMessage({ action: "updateBadgeNow" });
