@@ -1,6 +1,27 @@
 let intervalId = null;
 let lastUpdate = null;
 let muteState = false;
+let themeMode = 'dark'; // default
+
+function updateThemeIcon() {
+  const themeBtn = document.getElementById('theme-btn');
+  if (!themeBtn) return;
+  themeBtn.innerHTML = themeMode === 'dark' ? "🌙" : "☀️";
+  themeBtn.title = themeMode === 'dark' ? "Switch to light mode" : "Switch to dark mode";
+  themeBtn.setAttribute('aria-label', themeBtn.title);
+}
+
+function applyTheme(mode) {
+  document.body.classList.toggle('light-mode', mode === 'light');
+  document.documentElement.classList.toggle('light-mode', mode === 'light');
+  themeMode = mode;
+  updateThemeIcon();
+  // Save preference
+  chrome.storage.local.set({ "themeMode": mode });
+}
+function loadTheme(cb) {
+  chrome.storage.local.get({ "themeMode": "dark" }, result => cb(result.themeMode));
+}
 
 // Utility
 function debug(msg) {
@@ -196,6 +217,17 @@ document.addEventListener('DOMContentLoaded', () => {
   loadMuteState(mute => {
     muteState = mute;
     updateMuteBtnIcon();
+
+    loadTheme(mode => {
+      applyTheme(mode || 'dark');
+    });
+  
+    const themeBtn = document.getElementById('theme-btn');
+    if (themeBtn) {
+      themeBtn.addEventListener('click', () => {
+        applyTheme(themeMode === 'dark' ? 'light' : 'dark');
+      });
+    }
   });
 
   const refreshBtn = document.getElementById('refresh-btn');

@@ -5,189 +5,308 @@
   <meta charset="UTF-8">
   <title>Aka 7.6 Status</title>
   <style>
-    html,
-    body {
-      background: #17181b;
-      color: #e3e3e3;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      min-width: 250px;
-      min-height: 120px;
-    }
+html,
+body {
+  background: #17181b;
+  color: #e3e3e3;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-width: 250px;
+  min-height: 120px;
+}
 
-    body {
-      padding: 18px 15px 12px 15px;
-    }
+body {
+  padding: 18px 15px 12px 15px;
+}
 
-    .header-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 7px;
-      margin-bottom: 8px;
-      position: relative;
-    }
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+  margin-bottom: 8px;
+  position: relative;
+}
 
-    .header-main {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
+.header-main {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
 
-    .ext-title {
-      font-size: 1.17em;
-      letter-spacing: 1px;
-      font-weight: 600;
-      color: #7ddaff;
-      text-shadow: 0 1px 4px #0a0c10;
-      border-bottom: 2px dotted #69b3c6;
-      padding-bottom: 2px;
-      margin-bottom: 1px;
-      display: inline-block;
-    }
+.ext-title {
+  font-size: 1.17em;
+  letter-spacing: 1px;
+  font-weight: 600;
+  color: #7ddaff;
+  text-shadow: 0 1px 4px #0a0c10;
+  border-bottom: 2px dotted #69b3c6;
+  padding-bottom: 2px;
+  margin-bottom: 1px;
+  display: inline-block;
+}
 
-    .error {
-      color: #ff5656;
-      font-size: 0.97em;
-      margin-top: 1em;
-    }
+.error {
+  color: #ff5656;
+  font-size: 0.97em;
+  margin-top: 1em;
+}
 
-    .loading {
-      color: #8896a6;
-    }
+.loading {
+  color: #8896a6;
+}
 
-    .footer {
-      font-size: 0.93em;
-      color: #c2e2fd;
-      margin-top: 14px;
-      text-align: right;
-      line-height: 1.5em;
-      position: relative;
-    }
+.footer {
+  font-size: 0.93em;
+  color: #c2e2fd;
+  margin-top: 14px;
+  text-align: right;
+  line-height: 1.5em;
+  position: relative;
+}
 
-    .last-update-footer {
-      color: #6c89a6;
-      font-size: 0.91em;
-      margin-top: 5px;
-      margin-bottom: 0;
-      text-align: left;
-      position: absolute;
-      left: 0;
-      bottom: -2px;
-    }
+.last-update-footer {
+  color: #6c89a6;
+  font-size: 0.91em;
+  margin-top: 5px;
+  margin-bottom: 0;
+  text-align: left;
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+}
 
-    a {
-      color: #81daff;
-      text-decoration: none;
-      transition: color 0.2s;
-      word-break: break-all;
-    }
+a {
+  color: #81daff;
+  text-decoration: none;
+  transition: color 0.2s;
+  word-break: break-all;
+}
 
-    a:hover {
-      color: #fff7b2;
-      text-decoration: underline;
-    }
+a:hover {
+  color: #fff7b2;
+  text-decoration: underline;
+}
 
-    .stat {
-      color: #e3e3e3;
-    }
+.stat {
+  color: #e3e3e3;
+}
 
-    .stat b {
-      color: #7ddaff;
-    }
+.stat b {
+  color: #7ddaff;
+}
 
-    #refresh-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 1.7em;
-      width: 1.7em;
-      font-size: 1em;
-      background: #202a34;
-      color: #9cefff;
-      border: none;
-      border-radius: 50%;
-      margin: 0;
-      margin-left: 5px;
-      cursor: pointer;
-      transition: background 0.17s, color 0.17s, transform 0.07s;
-      box-shadow: 0 1px 4px #10101822;
-    }
+#refresh-btn,
+#mute-btn,
+#theme-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.7em;
+  width: 1.7em;
+  font-size: 1em;
+  background: #202a34;
+  color: #9cefff;
+  border: none;
+  border-radius: 50%;
+  margin: 0;
+  margin-left: 5px;
+  cursor: pointer;
+  transition: background 0.17s, color 0.17s, transform 0.07s, border 0.17s;
+  box-shadow: 0 1px 4px #10101822;
+}
 
-    #refresh-btn:hover {
-      background: #283544;
-      color: #fff;
-      transform: scale(1.1) rotate(-30deg);
-    }
+#refresh-btn:hover,
+#mute-btn:hover,
+#theme-btn:hover {
+  background: #283544;
+  color: #fff;
+  transform: scale(1.1) rotate(-15deg);
+}
 
-    #mute-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 1.7em;
-      width: 1.7em;
-      font-size: 1em;
-      background: #202a34;
-      color: #ffd480;
-      border: none;
-      border-radius: 50%;
-      margin: 0;
-      margin-left: 3px;
-      cursor: pointer;
-      transition: background 0.17s, color 0.17s, transform 0.07s;
-      box-shadow: 0 1px 4px #10101822;
-    }
+#theme-btn {
+  margin-left: 3px;
+  background: transparent;
+  color: #ffd480;
+  border: none;
+  box-shadow: none;
+}
+#theme-btn:focus {
+  outline: 1.5px solid #89b6f7;
+}
+body.dark-mode #theme-btn,
+html.dark-mode #theme-btn {
+  background: transparent;
+  color: #ffd480;
+  border: none;
+}
+body.light-mode #theme-btn,
+html.light-mode #theme-btn {
+  background: #e5eaf1;
+  color: #294a6e;
+  border: 1px solid #c1c9d6;
+}
 
-    #mute-btn:hover {
-      background: #283544;
-      color: #fff;
-      transform: scale(1.1) rotate(-15deg);
-    }
+.serverinfo-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
 
-    /* Server info and status row */
-    .serverinfo-inline {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 2px;
-    }
-    .server-status {
-      font-weight: 600;
-      padding: 0 2px;
-    }
-    .status-online {
-      color: #78ff78;
-    }
-    .status-offline {
-      color: #ff5656;
-    }
-    .uptime-inline {
-      color: #c3e3fa;
-      font-size: 0.98em;
-      margin-left: 8px;
-      letter-spacing: 1px;
-    }
-    .stat-value {
-      font-weight: 600;
-      color: #3db9f8;
-    }
-    .monsters-container {
-      margin: 3px 0 8px 0;
-    }
-    .stat.discord a {
-      color: #81daff;
-      text-decoration: none;
-    }
-    .stat.discord a:hover {
-      color: #fff7b2;
-      text-decoration: underline;
-    }
-    .watchdog-separator {
-      border: none;
-      border-top: 2px dashed #33425e;
-      margin: 18px 0 8px 0;
-    }
+.server-status {
+  font-weight: 600;
+  padding: 0 2px;
+}
+
+.status-online {
+  color: #78ff78;
+}
+
+.status-offline {
+  color: #ff5656;
+}
+
+.uptime-inline {
+  color: #c3e3fa;
+  font-size: 0.98em;
+  margin-left: 8px;
+  letter-spacing: 1px;
+}
+
+.stat-value {
+  font-weight: 600;
+  color: #3db9f8;
+}
+
+.monsters-container {
+  margin: 3px 0 8px 0;
+}
+
+.stat.discord a {
+  color: #81daff;
+  text-decoration: none;
+}
+
+.stat.discord a:hover {
+  color: #fff7b2;
+  text-decoration: underline;
+}
+
+.watchdog-separator {
+  border: none;
+  border-top: 2px dashed #33425e;
+  margin: 18px 0 8px 0;
+}
+
+/* ================= LIGHT MODE OVERRIDES ================= */
+body.light-mode,
+html.light-mode {
+  background: #f4f6fa;
+  color: #213045;
+}
+
+body.light-mode .ext-title {
+  color: #1a4f85;
+  text-shadow: 0 1px 4px #b6c6db;
+  border-bottom: 2px dotted #619edb;
+}
+
+body.light-mode .server-status,
+body.light-mode .status-online {
+  color: #19763a !important;
+}
+
+body.light-mode .status-offline {
+  color: #cc2626 !important;
+}
+
+body.light-mode .uptime-inline {
+  color: #1d3150;
+}
+
+body.light-mode .stat-value {
+  color: #155fa0;
+}
+
+body.light-mode .stat b {
+  color: #1877c3;
+}
+
+body.light-mode .monsters-container b {
+  color: #213045;
+}
+
+body.light-mode .monsters-container .stat-value {
+  color: #174f89;
+}
+
+body.light-mode .footer,
+body.light-mode .stat.discord a {
+  color: #29609e;
+}
+
+body.light-mode .stat.discord a:hover {
+  color: #294a6e;
+}
+
+body.light-mode .watchdog-separator {
+  border-top: 2px dashed #b6c6db;
+}
+
+body.light-mode .last-update-footer {
+  color: #6c89a6;
+}
+
+body.light-mode input,
+body.light-mode #watchdog-input {
+  background: #e9eef5 !important;
+  color: #213045 !important;
+  border: 1px solid #c1c9d6 !important;
+}
+
+body.light-mode #refresh-btn,
+body.light-mode #mute-btn,
+body.light-mode #theme-btn {
+  background: #e5eaf1;
+  color: #294a6e;
+  border: 1px solid #c1c9d6;
+}
+
+body.light-mode #refresh-btn:hover,
+body.light-mode #mute-btn:hover,
+body.light-mode #theme-btn:hover {
+  background: #d0d8e5;
+  color: #1a355b;
+}
+
+body.light-mode #show-players-btn {
+  background: #cfe2f6 !important;
+  color: #155fa0 !important;
+}
+
+body.light-mode .error {
+  color: #c73a3a;
+}
+
+body.light-mode .stat,
+body.light-mode .watchdog-form label,
+body.light-mode .watchdog-form b {
+  color: #233245 !important;
+}
+
+body.light-mode .watchdog-form input::placeholder {
+  color: #8793a3 !important;
+}
+
+body.light-mode #watchdog {
+  color: #5a697a;
+}
+
+body.light-mode #watchdog b {
+  color: #335b90 !important;
+}
   </style>
 </head>
 
@@ -197,6 +316,8 @@
       <span class="ext-title">Aka 7.6 Status</span>
       <button id="refresh-btn" title="Refresh now" aria-label="Refresh">⟳</button>
       <button id="mute-btn" title="Mute/unmute sound" aria-label="Mute/unmute" style="margin-left:3px;"></button>
+      <button id="theme-btn" title="Toggle light/dark mode" aria-label="Toggle light/dark mode"
+        style="margin-left:3px;">🌙</button>
     </div>
   </div>
 
