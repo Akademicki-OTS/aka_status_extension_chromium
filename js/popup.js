@@ -3,6 +3,7 @@ let lastUpdate = null;
 let muteState = false;
 let themeMode = 'dark'; // default
 
+/* ========== THEME ========== */
 function updateThemeIcon() {
   const themeBtn = document.getElementById('theme-btn');
   if (!themeBtn) return;
@@ -16,224 +17,205 @@ function applyTheme(mode) {
   document.documentElement.classList.toggle('light-mode', mode === 'light');
   themeMode = mode;
   updateThemeIcon();
-  // Save preference
   chrome.storage.local.set({ "themeMode": mode });
 }
+
 function loadTheme(cb) {
-  chrome.storage.local.get({ "themeMode": "dark" }, result => cb(result.themeMode));
+  chrome.storage.local.get({ "themeMode": "dark" }, r => cb(r.themeMode));
 }
 
-// Utility
+/* ========== STORAGE HELPERS ========== */
 function debug(msg) {
-  //console.log('[Aka 7.6 Legacy Popup]', msg);
+  // console.log('[Aka 7.6 Popup]', msg);
 }
+function saveWatchdogList(arr) { chrome.storage.local.set({ "watchdogList": arr }); }
+function loadWatchdogList(cb) { chrome.storage.local.get({ "watchdogList": [] }, r => cb(r.watchdogList)); }
+function saveMuteState(mute) { chrome.storage.local.set({ "muteState": mute }); }
+function loadMuteState(cb) { chrome.storage.local.get({ "muteState": false }, r => cb(r.muteState)); }
 
-// --- Watchdog Storage ---
-function saveWatchdogList(arr) {
-  chrome.storage.local.set({ "watchdogList": arr });
-}
-function loadWatchdogList(cb) {
-  chrome.storage.local.get({ "watchdogList": [] }, result => cb(result.watchdogList));
-}
-function saveMuteState(mute) {
-  chrome.storage.local.set({ "muteState": mute });
-}
-function loadMuteState(cb) {
-  chrome.storage.local.get({ "muteState": false }, result => cb(result.muteState));
-}
-
+/* ========== UI HELPERS ========== */
 function updateMuteBtnIcon() {
   const muteBtn = document.getElementById('mute-btn');
-  if (muteBtn) {
-    muteBtn.innerHTML = muteState ? "🔇" : "🔊";
-    muteBtn.title = muteState ? "Unmute sound" : "Mute sound";
-    muteBtn.setAttribute('aria-label', muteState ? "Unmute sound" : "Mute sound");
-  }
+  if (!muteBtn) return;
+  muteBtn.innerHTML = muteState ? "🔇" : "🔊";
+  muteBtn.title = muteState ? "Unmute sound" : "Mute sound";
+  muteBtn.setAttribute('aria-label', muteState ? "Unmute sound" : "Mute sound");
 }
 
+function formatRawUptime(uptime) {
+  if (!uptime) return "--";
+  return uptime.replace(/\s+/g, ' ').trim(); // collapse spaces
+}
+
+/* ========== WATCHDOG RENDER ========== */
 function renderWatchdog(playersOnline) {
   loadWatchdogList((watchdogList) => {
+    const root = document.getElementById('watchdog');
+    if (!root) return;
+
     let html = `
-      <button id="show-players-btn" style="
-        margin-bottom:8px; 
-        background:#232b37; 
-        border:none; 
-        color:#8ecffb; 
-        font-size:0.97em;
-        padding:3px 13px; 
-        border-radius:7px; 
-        cursor:pointer;
-      ">
-        Show players
-      </button>
-      <form id="add-watchdog-form" style="margin-bottom:7px;display:flex;gap:7px;">
-        <input id="watchdog-input" type="text" maxlength="30" placeholder="Player name" style="flex:1 1 0; border-radius:6px; border:1px solid #233; background:#212630; color:#eee; padding:3px 8px; font-size:0.98em;">
-        <button type="submit" style="background:#26354b; color:#7ddaff; border:none; border-radius:6px; padding:3px 11px; cursor:pointer;">Add</button>
+      <button id="show-players-btn" class="show-players-btn">Show players</button>
+      <form id="add-watchdog-form" class="watchdog-form">
+        <input id="watchdog-input" type="text" maxlength="30" placeholder="Player name">
+        <button type="submit" class="btn-add">Add</button>
       </form>
-      <div style="margin-bottom:5px;">
-        <b style="font-size:0.98em;color:#d9dfff;">Watchdog:</b>`;
+      <div class="watchdog-list-wrapper">
+        <b class="watchdog-label">Watchdog:</b>`;
 
     if (!watchdogList.length) {
-      html += `<span style="color:#889; margin-left:7px;">No players tracked</span>`;
+      html += `<span class="watchdog-empty"> No players tracked</span>`;
     } else {
-      html += `<ul style="padding-left:1.1em; margin:4px 0 2px 0;">`;
+      html += `<ul class="watchdog-ul">`;
       for (const name of watchdogList) {
         const isOnline = playersOnline.includes(name);
-        html += `<li style="margin-bottom:2px;">
-            <span style="color:${isOnline ? "#78ff78" : "#e3e3e3"};">${name}</span>
-            <button class="remove-watchdog-btn" data-name="${encodeURIComponent(name)}" title="Remove" style="margin-left:7px;background:#282a3a;border:none;color:#fe7777;cursor:pointer;border-radius:4px;font-size:0.96em;padding:0 6px;">✕</button>
-            ${isOnline ? `<span style="font-size:0.95em;color:#78ff78;margin-left:2px;">(online)</span>` : ""}
+        html += `
+          <li>
+            <span class="${isOnline ? 'player-online' : 'player-offline'}">${name}</span>
+            <button class="watchdog-remove-btn remove-watchdog-btn" data-name="${encodeURIComponent(name)}" title="Remove">✕</button>
+            ${isOnline ? `<span class="player-online online-tag">(online)</span>` : ""}
           </li>`;
       }
       html += `</ul>`;
     }
-    html += `</div>
-    <div id="players-list" style="display:none; margin:7px 0 10px 2px;"></div>
+    html += `
+      </div>
+      <div id="players-list" class="players-list" style="display:none;"></div>
     `;
 
-    document.getElementById('watchdog').innerHTML = html;
+    root.innerHTML = html;
 
-    // Show/hide player list button
-    const btn = document.getElementById('show-players-btn');
-    const list = document.getElementById('players-list');
-    if (btn && list) {
-      btn.addEventListener('click', () => {
-        if (list.innerHTML === "") {
-          if (playersOnline.length) {
-            list.innerHTML = playersOnline.map(player =>
-              `<a href="https://ots76.org/index.php?module=findchar&player=${encodeURIComponent(player)}" target="_blank">${player}</a>`
-            ).join('<br>');
-          } else {
-            list.innerHTML = '<span style="color:#aaa;font-size:0.97em;">No players online</span>';
-          }
+    // Show players toggle
+    const showBtn = document.getElementById('show-players-btn');
+    const listDiv = document.getElementById('players-list');
+    if (showBtn && listDiv) {
+      showBtn.addEventListener('click', () => {
+        if (listDiv.innerHTML === "") {
+          listDiv.innerHTML = playersOnline.length
+            ? playersOnline.map(p =>
+              `<a href="https://ots76.org/index.php?module=findchar&player=${encodeURIComponent(p)}" target="_blank">${p}</a>`
+            ).join('<br>')
+            : '<span class="players-empty">No players online</span>';
         }
-        const visible = list.style.display !== 'none';
-        list.style.display = visible ? 'none' : 'block';
-        btn.textContent = visible ? 'Show players' : 'Hide players';
+        const visible = listDiv.style.display !== 'none';
+        listDiv.style.display = visible ? 'none' : 'block';
+        showBtn.textContent = visible ? 'Show players' : 'Hide players';
       });
     }
 
-    // Add/Remove events for watchdog
-    document.getElementById('add-watchdog-form').onsubmit = (e) => {
-      e.preventDefault();
-      const input = document.getElementById('watchdog-input');
-      let val = input.value.trim();
-      if (!val) return;
-      val = val.replace(/\s+/g, " "); // Single spaces only
-      loadWatchdogList((watchdogList) => {
-        if (watchdogList.includes(val)) {
-          input.value = "";
-          return;
-        }
-        watchdogList.push(val);
-        saveWatchdogList(watchdogList);
-        input.value = "";
-        renderWatchdog(playersOnline);
+    // Add form submission
+    const form = document.getElementById('add-watchdog-form');
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const input = document.getElementById('watchdog-input');
+        if (!input) return;
+        let val = input.value.trim();
+        if (!val) return;
+        val = val.replace(/\s+/g, ' ');
+        loadWatchdogList(listArr => {
+          if (!listArr.includes(val)) {
+            listArr.push(val);
+            saveWatchdogList(listArr);
+            renderWatchdog(playersOnline);
+          }
+          input.value = '';
+        });
       });
-    };
+    }
+
+    // Remove handlers
     Array.from(document.getElementsByClassName('remove-watchdog-btn')).forEach(btn => {
-      btn.onclick = () => {
+      btn.addEventListener('click', () => {
         const name = decodeURIComponent(btn.getAttribute('data-name'));
-        loadWatchdogList((watchdogList) => {
-          const idx = watchdogList.indexOf(name);
+        loadWatchdogList(listArr => {
+          const idx = listArr.indexOf(name);
           if (idx !== -1) {
-            watchdogList.splice(idx, 1);
-            saveWatchdogList(watchdogList);
+            listArr.splice(idx, 1);
+            saveWatchdogList(listArr);
             renderWatchdog(playersOnline);
           }
         });
-      }
+      });
     });
   });
 }
 
+/* ========== FETCH STATUS ========== */
 async function fetchStatus(showLoading = false) {
   const content = document.getElementById('content');
-  debug('fetchStatus called');
-  if (showLoading) content.innerHTML = '<span class="loading">Loading...</span>';
+  if (showLoading && content) content.innerHTML = '<span class="loading">Loading...</span>';
+
   try {
-    const jsonResp = await fetch('http://game.ots76.org/client_json.php');
-    debug('JSON fetch status: ' + jsonResp.status);
-    if (!jsonResp.ok) throw new Error("Network error (stats)");
-    const data = await jsonResp.json();
-    debug('Fetched data: ' + JSON.stringify(data));
+    const resp = await fetch('http://game.ots76.org/client_json.php');
+    if (!resp.ok) throw new Error("Network error (stats)");
+    const data = await resp.json();
 
     const serverStatus = data.status || "Unknown";
-    const uptime = data.uptime || "—";
+    const uptimeRaw = formatRawUptime(data.uptime || "—");
     const monsters = data.monsters || "—";
-    const onlineString = data.online || "Unknown";
+    const onlineStr = data.online || "Unknown";
     const discordOnline = data.discord_online ?? "N/A";
     const players = Array.isArray(data.players) ? data.players : [];
 
-    let playersNum = onlineString.match(/^(\d+)/);
-    playersNum = playersNum ? playersNum[1] : onlineString;
+    let playersNum = onlineStr.match(/^(\d+)/);
+    playersNum = playersNum ? playersNum[1] : onlineStr;
 
     lastUpdate = new Date();
 
-    let html = `
+    const html = `
       <div class="serverinfo-inline">
         <span>Server: <span class="server-status ${serverStatus === "ONLINE" ? "status-online" : "status-offline"}">${serverStatus}</span></span>
-        <span class="uptime-inline">[${uptime.replace(/\s+/g, '').trim()}]</span>
+        <span class="uptime-inline">[${uptimeRaw}]</span>
       </div>
-      <div class="stat">
-        <b>Players online:</b> <span class="stat-value">${playersNum}</span>
-      </div>
+      <div class="stat"><b>Players online:</b> <span class="stat-value">${playersNum}</span></div>
       <div class="stat discord">
         <a href="https://discord.com/invite/jAU83Yg5SN" target="_blank" rel="noopener">
           <b>Discord online:</b> <span class="stat-value">${discordOnline}</span>
         </a>
       </div>
-      <div class="monsters-container">
-        <b>Monsters:</b> <span class="stat-value">${monsters}</span>
-      </div>
-      <hr class="watchdog-separator"/>
+      <div class="monsters-container"><b>Monsters:</b> <span class="stat-value">${monsters}</span></div>
+      <hr class="watchdog-separator" />
     `;
+    if (content) content.innerHTML = html;
 
-    content.innerHTML = html;
-
-    // --- Watchdog functionality ---
     renderWatchdog(players);
 
-    // --- LAST UPDATE footer ---
-    document.getElementById('last-update-footer').innerHTML =
-      `Last update: <span id="timestamp">${lastUpdate.toLocaleTimeString()}</span>`;
+    const lu = document.getElementById('last-update-footer');
+    if (lu) lu.innerHTML = `Last update: <span id="timestamp">${lastUpdate.toLocaleTimeString()}</span>`;
 
-    debug('Content updated in popup.');
     chrome.runtime.sendMessage({ action: "updateBadgeNow" });
-  } catch (e) {
-    content.innerHTML = `<div class="error">Failed to load data.<br>${e.message}</div>`;
-    debug('Error: ' + e.message);
+  } catch (err) {
+    if (content) {
+      content.innerHTML = `<div class="error">Failed to load data.<br>${err.message}</div>`;
+    }
   }
 }
 
+/* ========== AUTO REFRESH ========== */
 function startAutoRefresh() {
-  debug('Starting auto-refresh');
   if (intervalId) clearInterval(intervalId);
   intervalId = setInterval(() => fetchStatus(false), 10000);
 }
 
+/* ========== INIT ========== */
 document.addEventListener('DOMContentLoaded', () => {
-  debug('DOMContentLoaded event fired');
+  loadTheme(mode => applyTheme(mode || 'dark'));
+
+  const themeBtn = document.getElementById('theme-btn');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () =>
+      applyTheme(themeMode === 'dark' ? 'light' : 'dark')
+    );
+  }
+
   loadMuteState(mute => {
     muteState = mute;
     updateMuteBtnIcon();
-
-    loadTheme(mode => {
-      applyTheme(mode || 'dark');
-    });
-  
-    const themeBtn = document.getElementById('theme-btn');
-    if (themeBtn) {
-      themeBtn.addEventListener('click', () => {
-        applyTheme(themeMode === 'dark' ? 'light' : 'dark');
-      });
-    }
   });
 
   const refreshBtn = document.getElementById('refresh-btn');
   if (refreshBtn) {
     refreshBtn.addEventListener('click', () => {
-      debug('Refresh button clicked');
       fetchStatus(true);
       startAutoRefresh();
     });
@@ -253,6 +235,5 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.addEventListener('unload', () => {
-  debug('Popup unloaded, clearing interval');
   if (intervalId) clearInterval(intervalId);
 });
