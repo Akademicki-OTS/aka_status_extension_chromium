@@ -44,7 +44,7 @@ function updateMuteBtnIcon() {
 
 function formatRawUptime(uptime) {
   if (!uptime) return "--";
-  return uptime.replace(/\s+/g, ' ').trim(); // collapse spaces
+  return uptime.replace(/\s+/g, '').trim(); // collapse extra spaces
 }
 
 /* ========== WATCHDOG RENDER ========== */
@@ -53,12 +53,16 @@ function renderWatchdog(playersOnline) {
     const root = document.getElementById('watchdog');
     if (!root) return;
 
+    // Moved players-list directly under the button
     let html = `
       <button id="show-players-btn" class="show-players-btn">Show players</button>
+      <div id="players-list" class="players-list"></div>
+
       <form id="add-watchdog-form" class="watchdog-form">
         <input id="watchdog-input" type="text" maxlength="30" placeholder="Player name">
         <button type="submit" class="btn-add">Add</button>
       </form>
+
       <div class="watchdog-list-wrapper">
         <b class="watchdog-label">Watchdog:</b>`;
 
@@ -70,17 +74,16 @@ function renderWatchdog(playersOnline) {
         const isOnline = playersOnline.includes(name);
         html += `
           <li>
-            <span class="${isOnline ? 'player-online' : 'player-offline'}">${name}</span>
+            <a class="${isOnline ? 'player-online' : 'player-offline'}"
+               href="https://ots76.org/index.php?module=findchar&player=${encodeURIComponent(name)}"
+               target="_blank" rel="noopener">${name}</a>
             <button class="watchdog-remove-btn remove-watchdog-btn" data-name="${encodeURIComponent(name)}" title="Remove">✕</button>
             ${isOnline ? `<span class="player-online online-tag">(online)</span>` : ""}
           </li>`;
       }
       html += `</ul>`;
     }
-    html += `
-      </div>
-      <div id="players-list" class="players-list" style="display:none;"></div>
-    `;
+    html += `</div>`;
 
     root.innerHTML = html;
 
@@ -89,16 +92,21 @@ function renderWatchdog(playersOnline) {
     const listDiv = document.getElementById('players-list');
     if (showBtn && listDiv) {
       showBtn.addEventListener('click', () => {
-        if (listDiv.innerHTML === "") {
-          listDiv.innerHTML = playersOnline.length
-            ? playersOnline.map(p =>
-              `<a href="https://ots76.org/index.php?module=findchar&player=${encodeURIComponent(p)}" target="_blank">${p}</a>`
-            ).join('<br>')
-            : '<span class="players-empty">No players online</span>';
+        const isHidden = getComputedStyle(listDiv).display === 'none'; // or !listDiv.classList.contains('open')
+
+        if (isHidden && listDiv.innerHTML === "") {
+          if (playersOnline.length) {
+            const listItems = playersOnline.map(p =>
+              `<li><a href="https://ots76.org/index.php?module=findchar&player=${encodeURIComponent(p)}" target="_blank" rel="noopener">${p}</a></li>`
+            ).join('');
+            listDiv.innerHTML = `<ul class="players-ul">${listItems}</ul>`;
+          } else {
+            listDiv.innerHTML = '<span class="players-empty">No players online</span>';
+          }
         }
-        const visible = listDiv.style.display !== 'none';
-        listDiv.style.display = visible ? 'none' : 'block';
-        showBtn.textContent = visible ? 'Show players' : 'Hide players';
+
+        listDiv.style.display = isHidden ? 'block' : 'none';
+        showBtn.textContent = isHidden ? 'Hide players' : 'Show players';
       });
     }
 

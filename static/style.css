@@ -72,11 +72,11 @@ body {
   bottom: -2px;
 }
 
-/* Links */
+/* Links (global default) */
 a {
   color: #81daff;
   text-decoration: none;
-  transition: color 0.2s;
+  transition: color 0.2s, background 0.2s;
   word-break: break-all;
 }
 
@@ -99,7 +99,7 @@ a:hover {
   color: #3db9f8;
 }
 
-/* Buttons (general utility) */
+/* Buttons */
 #refresh-btn,
 #mute-btn,
 #theme-btn {
@@ -136,7 +136,7 @@ a:hover {
   box-shadow: none;
 }
 
-/* Focus */
+/* Focus states */
 #theme-btn:focus,
 #refresh-btn:focus,
 #mute-btn:focus,
@@ -195,7 +195,7 @@ a:hover {
   margin: 18px 0 8px 0;
 }
 
-/* ===== Watchdog Section ===== */
+/* ===== Watchdog / Players Section ===== */
 .show-players-btn {
   margin-bottom: 8px;
   background: #232b37;
@@ -213,6 +213,54 @@ a:hover {
   color: #c3eaff;
 }
 
+/* players list container under button */
+.players-list {
+  margin: 4px 0 10px 0;
+  font-size: 0.92em;
+  line-height: 1.25em;
+  display: none;
+  padding-left: 0;
+}
+
+.players-empty {
+  opacity: .7;
+  font-size: 0.97em;
+}
+
+/* Unified UL/LI styling for both lists */
+.players-ul,
+.watchdog-ul {
+  padding-left: 1.1em;
+  margin: 4px 0 2px 0;
+  list-style: disc;
+}
+
+.players-ul li,
+.watchdog-ul li {
+  margin-bottom: 2px;
+}
+
+/* Link styling inside both lists (dark mode defaults) */
+.players-ul a,
+.watchdog-ul a {
+  color: #b6cad8;
+  text-decoration: none;
+  transition: color .15s, background .15s;
+  border-radius: 3px;
+  padding: 1px 2px;
+}
+
+.players-ul a:hover,
+.players-ul a:focus,
+.watchdog-ul a:hover,
+.watchdog-ul a:focus {
+  color: #e2f4ff;
+  background: #2a3a46;
+  text-decoration: underline;
+  outline: none;
+}
+
+/* Watchdog form */
 .watchdog-form {
   display: flex;
   gap: 7px;
@@ -254,12 +302,6 @@ a:hover {
   margin-left: 7px;
 }
 
-.watchdog-ul {
-  padding-left: 1.1em;
-  margin: 4px 0 2px 0;
-  list-style: disc;
-}
-
 .player-online {
   color: #78ff78;
   font-weight: 500;
@@ -267,6 +309,11 @@ a:hover {
 
 .player-offline {
   color: #e3e3e3;
+}
+
+.online-tag {
+  font-size: 0.9em;
+  margin-left: 2px;
 }
 
 .watchdog-remove-btn {
@@ -284,21 +331,6 @@ a:hover {
 .watchdog-remove-btn:hover {
   background: #3a2a2a;
   color: #ff9a9a;
-}
-
-.players-list {
-  margin: 7px 0 10px 2px;
-  font-size: 0.92em;
-}
-
-.players-empty {
-  opacity: .7;
-  font-size: 0.97em;
-}
-
-.online-tag {
-  font-size: 0.9em;
-  margin-left: 2px;
 }
 
 /* ===== LIGHT MODE OVERRIDES ===== */
@@ -343,21 +375,23 @@ body.light-mode .monsters-container .stat-value {
   color: #174f89;
 }
 
-body.light-mode .footer,
+/* Discord link color in light mode */
 body.light-mode .stat.discord a {
   color: #223652 !important;
 }
 
+body.light-mode .stat.discord a:hover {
+  color: #294a6e !important;
+}
+
+/* Footer links same color as Discord link */
+body.light-mode .footer,
 body.light-mode .footer a {
   color: #223652 !important;
 }
 
 body.light-mode .footer a:hover {
   color: #496fa3 !important;
-}
-
-body.light-mode .stat.discord a:hover {
-  color: #294a6e;
 }
 
 body.light-mode .watchdog-separator {
@@ -437,13 +471,28 @@ body.light-mode .error {
   color: #c73a3a;
 }
 
-/* ===== DARK MODE TUNING FOR WATCHDOG & PLAYERS LIST ===== */
+/* Light mode: links in both lists */
+body.light-mode .players-ul a,
+body.light-mode .watchdog-ul a {
+  color: #223652;
+}
+
+body.light-mode .players-ul a:hover,
+body.light-mode .players-ul a:focus,
+body.light-mode .watchdog-ul a:hover,
+body.light-mode .watchdog-ul a:focus {
+  color: #294a6e;
+  background: #d7e7f5;
+  text-decoration: underline;
+}
+
+/* ===== DARK MODE TUNING ===== */
 body:not(.light-mode) .player-offline {
   color: #b4bcc4;
 }
 
 body:not(.light-mode) .player-online {
-  color: #1877c3; 
+  color: #54dd54;
   font-weight: 500;
 }
 
@@ -469,7 +518,7 @@ body:not(.light-mode) .players-list a:focus {
 }
 
 body:not(.light-mode) .watchdog-label {
-  color: #2a3a46;
+  color: #c3ced8;
 }
 
 body:not(.light-mode) .watchdog-remove-btn {
@@ -480,8 +529,4 @@ body:not(.light-mode) .watchdog-remove-btn {
 body:not(.light-mode) .watchdog-remove-btn:hover {
   background: #353846;
   color: #ffa0a0;
-}
-
-.players-list {
-  line-height: 1.25em;
 }
