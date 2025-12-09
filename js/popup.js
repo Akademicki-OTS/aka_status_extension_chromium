@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
       showBtn.addEventListener('click', () => {
         const isHidden = getComputedStyle(listDiv).display === 'none';
   
-        if (isHidden) {
+        if (isHidden && listDiv.innerHTML.trim() === "") {
           if (lastPlayersOnline.length) {
             const listItems = lastPlayersOnline.map(p =>
               `<li><a href="https://ots76.org/index.php?module=findchar&player=${encodeURIComponent(p)}"
