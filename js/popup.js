@@ -1,5 +1,6 @@
 let intervalId = null;
 let lastUpdate = null;
+let lastPlayersOnline = [];
 let muteState = false;
 let themeMode = 'dark'; // default
 
@@ -49,20 +50,17 @@ function formatRawUptime(uptime) {
 
 /* ========== WATCHDOG RENDER ========== */
 function renderWatchdog(playersOnline) {
+  // Remember latest players list so "Show players" button can use it
+  if (Array.isArray(playersOnline)) {
+    lastPlayersOnline = playersOnline;
+  }
+
   loadWatchdogList((watchdogList) => {
-    const root = document.getElementById('watchdog');
-    if (!root) return;
+    // We now only render into #watchdog-list, not the entire #watchdog block
+    const listRoot = document.getElementById('watchdog-list');
+    if (!listRoot) return;
 
-    // Moved players-list directly under the button
     let html = `
-      <button id="show-players-btn" class="show-players-btn">Show players</button>
-      <div id="players-list" class="players-list"></div>
-
-      <form id="add-watchdog-form" class="watchdog-form">
-        <input id="watchdog-input" type="text" maxlength="30" placeholder="Player name">
-        <button type="submit" class="btn-add">Add</button>
-      </form>
-
       <div class="watchdog-list-wrapper">
         <b class="watchdog-label">Watchdog:</b>`;
 
@@ -71,13 +69,13 @@ function renderWatchdog(playersOnline) {
     } else {
       html += `<ul class="watchdog-ul">`;
       for (const name of watchdogList) {
-        const isOnline = playersOnline.includes(name);
+        const isOnline = lastPlayersOnline.includes(name);
         html += `
           <li>
             <a class="${isOnline ? 'player-online' : 'player-offline'}"
                href="https://ots76.org/index.php?module=findchar&player=${encodeURIComponent(name)}"
                target="_blank" rel="noopener">${name}</a>
-            <button class="watchdog-remove-btn remove-watchdog-btn" data-name="${encodeURIComponent(name)}" title="Remove">✕</button>
+            <button class="watchdog-remove-btn" data-name="${encodeURIComponent(name)}" title="Remove">✕</button>
             ${isOnline ? `<span class="player-online online-tag">(online)</span>` : ""}
           </li>`;
       }
@@ -85,54 +83,10 @@ function renderWatchdog(playersOnline) {
     }
     html += `</div>`;
 
-    root.innerHTML = html;
+    listRoot.innerHTML = html;
 
-    // Show players toggle
-    const showBtn = document.getElementById('show-players-btn');
-    const listDiv = document.getElementById('players-list');
-    if (showBtn && listDiv) {
-      showBtn.addEventListener('click', () => {
-        const isHidden = getComputedStyle(listDiv).display === 'none'; // or !listDiv.classList.contains('open')
-
-        if (isHidden && listDiv.innerHTML === "") {
-          if (playersOnline.length) {
-            const listItems = playersOnline.map(p =>
-              `<li><a href="https://ots76.org/index.php?module=findchar&player=${encodeURIComponent(p)}" target="_blank" rel="noopener">${p}</a></li>`
-            ).join('');
-            listDiv.innerHTML = `<ul class="players-ul">${listItems}</ul>`;
-          } else {
-            listDiv.innerHTML = '<span class="players-empty">No players online</span>';
-          }
-        }
-
-        listDiv.style.display = isHidden ? 'block' : 'none';
-        showBtn.textContent = isHidden ? 'Hide players' : 'Show players';
-      });
-    }
-
-    // Add form submission
-    const form = document.getElementById('add-watchdog-form');
-    if (form) {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const input = document.getElementById('watchdog-input');
-        if (!input) return;
-        let val = input.value.trim();
-        if (!val) return;
-        val = val.replace(/\s+/g, ' ');
-        loadWatchdogList(listArr => {
-          if (!listArr.includes(val)) {
-            listArr.push(val);
-            saveWatchdogList(listArr);
-            renderWatchdog(playersOnline);
-          }
-          input.value = '';
-        });
-      });
-    }
-
-    // Remove handlers
-    Array.from(document.getElementsByClassName('remove-watchdog-btn')).forEach(btn => {
+    // Remove handlers (only inside the list)
+    Array.from(listRoot.getElementsByClassName('watchdog-remove-btn')).forEach(btn => {
       btn.addEventListener('click', () => {
         const name = decodeURIComponent(btn.getAttribute('data-name'));
         loadWatchdogList(listArr => {
@@ -140,13 +94,14 @@ function renderWatchdog(playersOnline) {
           if (idx !== -1) {
             listArr.splice(idx, 1);
             saveWatchdogList(listArr);
-            renderWatchdog(playersOnline);
+            renderWatchdog(lastPlayersOnline);
           }
         });
       });
     });
   });
 }
+
 
 /* ========== FETCH STATUS ========== */
 async function fetchStatus(showLoading = false) {
@@ -237,6 +192,51 @@ document.addEventListener('DOMContentLoaded', () => {
       updateMuteBtnIcon();
     });
   }
+
+    // Show players toggle
+    const showBtn = document.getElementById('show-players-btn');
+    const listDiv = document.getElementById('players-list');
+    if (showBtn && listDiv) {
+      showBtn.addEventListener('click', () => {
+        const isHidden = getComputedStyle(listDiv).display === 'none';
+  
+        if (isHidden) {
+          if (lastPlayersOnline.length) {
+            const listItems = lastPlayersOnline.map(p =>
+              `<li><a href="https://ots76.org/index.php?module=findchar&player=${encodeURIComponent(p)}"
+                      target="_blank" rel="noopener">${p}</a></li>`
+            ).join('');
+            listDiv.innerHTML = `<ul class="players-ul">${listItems}</ul>`;
+          } else {
+            listDiv.innerHTML = '<span class="players-empty">No players online</span>';
+          }
+        }
+  
+        listDiv.style.display = isHidden ? 'block' : 'none';
+        showBtn.textContent = isHidden ? 'Hide players' : 'Show players';
+      });
+    }
+  
+    // add player to watchdog
+    const form = document.getElementById('add-watchdog-form');
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const input = document.getElementById('watchdog-input');
+        if (!input) return;
+        let val = input.value.trim();
+        if (!val) return;
+        val = val.replace(/\s+/g, ' ');
+        loadWatchdogList(listArr => {
+          if (!listArr.includes(val)) {
+            listArr.push(val);
+            saveWatchdogList(listArr);
+            renderWatchdog(lastPlayersOnline); // re-render list, keep input intact
+          }
+          input.value = ''; // clear only after successful add
+        });
+      });
+    }  
 
   fetchStatus(true);
   startAutoRefresh();
