@@ -21,7 +21,17 @@
     <span class="loading">Loading...</span>
   </div>
 
-  <div id="watchdog" style="margin:14px 0 0 0;"></div>
+  <div id="watchdog" style="margin:14px 0 0 0;">
+    <button id="show-players-btn" class="show-players-btn">Show players</button>
+    <div id="players-list" class="players-list"></div>
+  
+    <form id="add-watchdog-form" class="watchdog-form">
+      <input id="watchdog-input" type="text" maxlength="30" placeholder="Player name">
+      <button type="submit" class="btn-add">Add</button>
+    </form>
+  
+    <div id="watchdog-list"></div>
+  </div>
 
   <div class="footer">
     <a href="http://ots76.org/" target="_blank">ots76.org</a><br />
